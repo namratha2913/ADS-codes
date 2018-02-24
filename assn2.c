@@ -151,11 +151,11 @@ struct avl_node* balance_tree(struct avl_node* root)
 	{int bal = balance(root);
 		//printf("%d--bal=%d\n\n",root->data,bal);
 	    
-		if (bal > 1 && balance(root->left) > 0)
+		if (bal > 1 && balance(root->left) >= 0)
 		return rotright(root);
 	 
 	    
-		if (bal < -1 &&  balance(root->right) < 0)
+		if (bal < -1 &&  balance(root->right) <=0)
 		return rotleft(root);
 	 
 	    
@@ -186,6 +186,8 @@ struct avl_node* join(struct avl_node* l,struct avl_node* n,int dir)
 	return n; 
 }
 
+//Split Funtion 
+
 struct trees split(struct avl_node* node ,int key)
 {
 	struct trees res;
@@ -195,38 +197,46 @@ struct trees split(struct avl_node* node ,int key)
 		res.d=0;
 		return res;	
 	}
+		
 
 	
-		else
+	else
 	{
 		
 		if(key<node->data)
 		{
+			
 			res=split(node->left,key);
 			res.t2=join(res.t2,node,0);
-			res.d=0;
+			//res.d=0;
+			
 			res.t2=balance_tree(res.t2);
 			res.t1=balance_tree(res.t1);
+			
 			return res;
 						
 		}
 		else if(key==node->data)
 		{	
+			
 			res.t1=node->left;
 			res.t2=node->right;
 			res.d=node->data;
 			res.t2=balance_tree(res.t2);
 			res.t1=balance_tree(res.t1);
+			
 			//printf("%d!!!\n",res.d);
 			return res;
 		}
 		else
 		{
+			
 			res=split(node->right,key);
 			res.t1=join(res.t1,node,1);
-			res.d=0;
+			//res.d=0;
 			res.t2=balance_tree(res.t2);
 			res.t1=balance_tree(res.t1);
+			
 			return res;
 		}	
 		
@@ -245,7 +255,7 @@ int main()
 	FILE *fp;
 	struct avl_node* root=NULL;
 	struct trees T;
-	fp=fopen("addnode.txt","r");
+	fp=fopen("input1_t1.txt","r");
 	
 	fscanf (fp, "%d", &n);    
 	while (!feof (fp))
@@ -255,7 +265,7 @@ int main()
 		fscanf (fp, "%d", &n);      
 	}
 	fclose(fp);
-	//print(root);
+	print(root);
 	
 	printf("\n Enter Key to split tree:");
 	scanf("%d",&n);
@@ -263,11 +273,11 @@ int main()
 	T=split(root,n);
 	end = clock();
 	cpu_time_used = ((double) (end - start));
-	//printf("\n----T1----\n");
-	//print(T.t1);
-	//printf("\n key found? :%d \n",T.d);
-	//printf("\n----T2----\n");
-	//print(T.t2);
+	printf("\n----T1----\n");
+	print(T.t1);
+	printf("\n key found? :%d \n",T.d);
+	printf("\n----T2----\n");
+	print(T.t2);
 
 	printf("time of execution:%f\n",cpu_time_used/CLOCKS_PER_SEC);
 
