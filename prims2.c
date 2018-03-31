@@ -89,7 +89,7 @@ struct node* BINOMIAL_HEAP_UNION(struct node* H1,struct node* H2)
 	    }
 	else
 	    {
-	     if(x->n<=next_x->n)
+	     if(x->m<=next_x->m)
 	      {
 		x->sibling=next_x->sibling;
 		BINOMIAL_LINK(next_x,x);
@@ -258,17 +258,14 @@ int BINOMIAL_HEAP_DECREASE_KEY(struct node* H,int i,int k)
     struct node* p;
     struct node* y;
     struct node* z;
-    
-    //printf("\n%d node before redn has %d\n",p->n,p->m);
-    if(H==NULL)
+    p=FIND_NODE(H,i);
+    //printf("\n%d node befor redn has %d\n",p->n,p->m);
+    if(p==NULL)
       {
 	printf("\nINVALID CHOICE OF KEY TO BE REDUCED!!!");
 	return 0;
       }
-     p=FIND_NODE(H,i);
-     if(p==NULL)
-       return 0;
-     if(k>p->m)
+    if(k>p->m)
       {
       printf("\nERROR!!!!!THE NEW KEY IS GREATER THAN CURRENT ONE!!!");
       //return 0;
@@ -443,19 +440,19 @@ void PrimMST(struct Graph* graph)
         // Extract the vertex with minimum key value
         struct node* p= BINOMIAL_HEAP_EXTRACT_MIN(H);
         int u = p->n; // Store the extracted vertex number
-        printf("\nmin=%d  ---of----%d node\n",p->m,u);
+        //printf("\nmin=%d  ---of----%d node\n",p->m,u);
 
         // Traverse through all adjacent vertices of u (the extracted vertex) and update their key values
         struct AdjListNode* move = graph->array[u].head;
         while (move != NULL)
         {
             int v = move->dest;
-            printf("node no:%d of wt=%d and key=%d \n",v,move->weight,key[v]);
+            //printf("node no:%d of wt=%d and key=%d \n",v,move->weight,key[v]);
            
             // If v is not yet included in MST and weight of u-v is less than key value of v, then update key value and parent of v
             if (isInMinHeap(v) && move->weight < key[v])
             {
-                printf("\nDoing!!!\n");
+                //printf("Doing!!!\n");
                 key[v] = move->weight;
                 parent[v] = u;
                 BINOMIAL_HEAP_DECREASE_KEY(H, v, key[v]);
@@ -475,7 +472,7 @@ int main()
 
     int n,a,b,c,i;
     FILE *fp;
-    fp=fopen("ip_graph2.txt","r");
+    fp=fopen("ip_graph3.txt","r");
     fscanf (fp, "%d", &n); 
     int V = n;
     struct Graph* graph = createGraph(V);   
